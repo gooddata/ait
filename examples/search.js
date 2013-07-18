@@ -16,7 +16,7 @@ var Button = AIT.PageFragment.extend({
     }
 });
 
-var GoogleSearch = AIT.PageObject.extend({
+var Search = AIT.PageObject.extend({
     query: '',
     results: null,
 
@@ -49,7 +49,7 @@ var GoogleSearch = AIT.PageObject.extend({
 
 
 // Using the PageObject and PageFragments
-var search = GoogleSearch.create({ query: 'GoodData' }); // google for
+var search = Search.create({ query: 'GoodData' }); // google for
 
 var results = search.execute();
 

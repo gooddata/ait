@@ -116,17 +116,6 @@ Page representation which navigates the browser to a particular page `url`
    Navigates the browser to the `url` configured
 
 
-### Base Fragments
-
-#### Button
-
- *`# click()`*
-
-#### Input
-
- *`# type(text)`*
-
-
 Mocha Testing
 -------------
 
