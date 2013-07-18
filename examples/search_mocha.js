@@ -15,7 +15,7 @@ describe('Google Search', function() {
         }
     });
 
-    var GoogleSearch = AIT.PageObject.extend({
+    var Search = AIT.PageObject.extend({
         query: '',
         results: null,
 
@@ -41,7 +41,7 @@ describe('Google Search', function() {
     after(AIT.after);
 
     it('should find GoodData references', function() {
-        var search = GoogleSearch.create({ query: 'GoodData' });
+        var search = Search.create({ query: 'GoodData' });
 
         var results = search.execute();
         if (results.length < 5) throw "GoodData not found!";
