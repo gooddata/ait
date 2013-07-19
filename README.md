@@ -87,18 +87,31 @@ Provides encapsulation for an arbitrary page fragment aiming to expose logical c
 
    Waits for the $root element to be present
 
+ *`.# exec(functor)`*
+
+   Executes the functor body inside the driven browser page.
+
+
 ### PageFragmentArray
 
 An ArrayProxy for typed PageFragment items.
 
-Example from fragments/dashboard.js:
+For example:
 
 ```javascript
+var Tab = PageFragment.extend({
+    title: function() {
+        return this.$().text();
+    }.property(),
+});
+
 var Tabs = PageFragmentArray.extend({ itemClass: Tab });
+
 var Dashboard = PageFragment.extend({
     tabs: By.css(Tabs, '.yui3-dashboardtab'),
 });
 
+var dash = AIT.browser.create(Dashboard, '.dashboard');
 var tabs = dash.get('tabs');
 tabs.get('length');
 tabs.objectAt(0).get('title');
