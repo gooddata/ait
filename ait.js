@@ -2,17 +2,46 @@
 
 var au = require('auquery');
 
-var ait = {
+// Exported AIT instance
+var AIT = {
     $: null,
     browser: null
 };
 
 // Export PageFragments and friends to be globally accessible
 var fragment = require('./lib/fragment.js');
-// export Page(Fragment|Object|*) to ait
-fragment.exportClasses(ait);
+// export Page(Fragment|Object|*) to AIT
+fragment.exportClasses(AIT);
 
-ait.init = function aitInit(options, callback) {
+/**
+ * @property AIT.options
+ *
+ * Set from within the AIT.init where it merges its `options` argument with the
+ * result of .aitrc file.
+ **/
+
+/**
+ * @property AIT.options.browserName
+ *
+ * Browser name to configure the WebDriver with. The following were tested:
+ * 'chrome', 'firefox', 'phantomjs'.
+ **/
+
+/**
+ * @property AIT.options.implicitWaitTimeout
+ *
+ * implicitWaitTimeout setting for WebDriver
+ **/
+
+/**
+ * Initialize the AIT environment. Sets the AuQuery instance to AIT.$ and
+ * an initialized WebDriver to AIT.browser variable.
+ *
+ * @method init
+ * @param {Object} options Configuration object
+ * @param {Function} callback A callback to call upon completion
+ **/
+AIT.init = function aitInit(options, callback) {
     if (!callback) {
         callback = options;
         options = null;
@@ -41,14 +70,14 @@ ait.init = function aitInit(options, callback) {
         options.set('browserName', process.env.browser);
     }
 
-    ait.options = options;
+    AIT.options = options;
 
     function cb($, browser){
-        var options = ait.options;
+        var options = AIT.options;
 
-        // initialized $ and browser into the global.ait namespace
-        ait.$ = $;
-        ait.browser = browser;
+        // initialized $ and browser into the global.AIT namespace
+        AIT.$ = $;
+        AIT.browser = browser;
 
         // provide unconditional wait() method
         browser.wait = this.wait.bind(this);
@@ -98,6 +127,12 @@ ait.init = function aitInit(options, callback) {
         // initializing the timeout
         browser.setImplicitWaitTimeout(browser.implicitWaitTimeout);
 
+        /**
+         * @method create
+         *
+         * Factory method to instantiate PageFragment using the configured
+         * connected WebDriver client instance.
+         **/
         browser.create = function(Clazz, selector, by) {
             if (Clazz) { // fragment type, create the fragment
                 if (by) {
@@ -119,7 +154,7 @@ ait.init = function aitInit(options, callback) {
         };
 
         // use the initialized $ and browser
-        fragment.init(ait);
+        fragment.init(AIT);
 
         // mocha expects the first argument to be an Error in its done()
         // async functions
@@ -130,7 +165,7 @@ ait.init = function aitInit(options, callback) {
     b.drive(cb, function(err, res){
         if(!err) return;
 
-        var browser = ait.browser;
+        var browser = AIT.browser;
         try {
             browser.screenshot('ait-error-' + new Date().getTime() + '.png');
             browser.quit();
@@ -141,8 +176,12 @@ ait.init = function aitInit(options, callback) {
     });
 };
 
-ait.destroy = function aitDestroy() {
-    ait.browser.quit();
+/**
+ * @method destroy
+ * Ensure the AIT instance is cleaned up eventually.
+ **/
+AIT.destroy = function aitDestroy() {
+    AIT.browser.quit();
 };
 
-module.exports = ait;
+module.exports = AIT;
