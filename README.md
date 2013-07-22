@@ -52,6 +52,32 @@ browser=(chrome|firefox) mocha ./examples/search_mocha.js
 ```
 
 
+Configuration
+-------------
+
+The `AIT.options` Em.Object instance will be filled in with a result of the `.aitrc` JavaScript configuration file. This is to be placed to the current working directory from which the AIT utilizing script is started. Optionally the `aitrc` environment variable can be used to point to the config file.
+
+Also require() call is supported in order to be able to structure the configuration arbitrarilly. For example:
+
+```
+$ cat .aitrc
+({
+    server: "https://secure.gooddata.com",
+
+    gdcUser: "demo@acme.com",
+
+    // load password from the `.aitpass` file
+    gdcPass: require(__dirname+'/.aitpass')
+})
+```
+
+Then accessing the individual variables can be done as follows:
+
+```
+console.log( AIT.options.gdcUser );
+```
+
+
 API
 ---
 
