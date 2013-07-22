@@ -118,7 +118,12 @@ AIT.init = function aitInit(options, callback) {
             var data = browser.takeScreenshot();
 
             filename = filename || 'ait-screenshot-' + new Date().getTime() + '.png';
-            require('fs').writeFileSync(filename, data, 'base64');
+
+            var dir = options.screenshotsDir || 'ait-screenshots';
+
+            var fs = require('fs');
+            if (!path.existsSync(dir)) fs.mkdirSync(destDir);
+            fs.writeFileSync(dir + '/' + filename, data, 'base64');
         };
 
         // Implicit wait timeout defaults to 100s
