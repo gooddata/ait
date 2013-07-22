@@ -122,7 +122,7 @@ AIT.init = function aitInit(options, callback) {
             var dir = options.screenshotsDir || 'ait-screenshots';
 
             var fs = require('fs');
-            if (!path.existsSync(dir)) fs.mkdirSync(destDir);
+            if (!path.existsSync(dir)) fs.mkdirSync(dir);
             fs.writeFileSync(dir + '/' + filename, data, 'base64');
         };
 
