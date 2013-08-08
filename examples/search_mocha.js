@@ -1,7 +1,7 @@
 // Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
 
 describe('Google Search', function() {
-    var AIT = require('ait/mocha');
+    var AIT = require('../mocha');
 
     var Input = AIT.PageFragment.extend({
         type: function(text) {
@@ -36,14 +36,19 @@ describe('Google Search', function() {
         }
     });
 
-    before(AIT.before);
+    before(function(done) {
+        var that = this;
+        // Callback runs in AIT context
+        AIT.before(function() {
+            that.timeout(100000);
+            done();
+        });
+    });
 
     after(AIT.after);
 
     it('should find GoodData references', function() {
-        var search = Search.create({ query: 'GoodData' });
-
-        var results = search.execute();
+        var results = Search.create({ query: 'GoodData' }).execute();
         if (results.length < 5) throw "GoodData not found!";
     });
 });

@@ -1,24 +1,26 @@
 {
   "name": "ait",
   "main": "./ait.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Automated Integration Testing Framework",
-  "repository" : {
-      "type": "git",
-      "url": "http://github.com/gooddata/ait.git"
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/gooddata/ait.git"
   },
   "license": "Copyright (c) 2013, GoodData Corporation (BSD License)",
   "dependencies": {
-      "fibers": "~1.0",
-      "auquery": "git://github.com/cyrjano/AuQuery",
-      "ember-runtime": "~0.9.2",
-
-      "wd": "0.0.32"
+    "fibers": "~1.0",
+    "auquery": "git://github.com/cyrjano/AuQuery",
+    "ember-runtime": "~0.9.2",
+    "wd": "0.0.32"
   },
   "devDependencies": {
-      "mocha": "~1.12"
+    "mocha": "~1.12",
+    "expect.js": "~0.2.0",
+    "sinon": "~1.7.3",
+    "sinon-expect": "~0.2.0"
   },
   "engines": {
-      "node": ">=0.8.0"
+    "node": ">=0.8.0"
   }
 }

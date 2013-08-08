@@ -185,8 +185,8 @@ AIT.init = function aitInit(options, callback) {
  * @method destroy
  * Ensure the AIT instance is cleaned up eventually.
  **/
-AIT.destroy = function aitDestroy() {
-    AIT.browser.quit();
+AIT.destroy = function aitDestroy(callback) {
+    AIT.browser.quit(callback);
 };
 
 module.exports = AIT;
