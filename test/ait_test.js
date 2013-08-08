@@ -1,3 +1,5 @@
+// Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
+
 var AIT = require('../mocha.js');
 AIT.unWrapMochaMethods();
 
