@@ -1,6 +1,6 @@
 // Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
 
-var AIT = require('ait');
+var AIT = require('../ait');
 
 AIT.init(function(err, $, browser) {
 

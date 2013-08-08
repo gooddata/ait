@@ -2,29 +2,25 @@
 
 var AIT = require('./ait.js');
 
-//
-// mocha it() wrap() method
-//
-// Allows the user to write tests as follows:
-//
-//   it('click button', wrap(function() { $('button').click(); }));
-//
+/**
+ * mocha it() wrap() method
+ *
+ * Allows the user to write tests as follows:
+ *
+ * it('click button', wrap(function() { $('button').click(); }));
+*/
 var Fiber = require('fibers');
 
 function aitWrap(fn) {
     var f = fn;
 
-    function runFn() {
-        var that = this, finish = arguments[0];
+    function runFn(done) {
+        var that = this;
 
         Fiber(function() {
             // inject out browser instance into the wrap() method functor
             Fiber.current.browser = AIT.browser;
-            if (finish) {
-                f.apply(that, [finish]);
-            } else {
-                f.apply(that, []);
-            }
+            f.apply(that, [done]);
         }).run();
     }
 
@@ -38,41 +34,51 @@ function aitWrap(fn) {
         };
         return function(done) { runFn(done); };
     }
-};
-
+}
 
 AIT.wrap = aitWrap;
 
-AIT.before = function aitBefore(done) {
+AIT.before = function aitBefore(callback) {
     AIT._ait_beforeCalled = true;
 
-    //console.info('before', this.test.parent);
-    if (!this.test.parent._afterAll.length) {
-        throw new Error('AIT: Be sure to issue before(AIT.before); after(AIT.after); calls in your describe().');
-    }
-
-    this.timeout(100000);
-
-    AIT.init(done);
+    AIT.init(callback);
 };
 
-AIT.after = AIT.wrap(function aitAfter() {
-    AIT.destroy();
-});
 
-//
-// Wrap the mocha `it()` calls automatically.
-//
-var i = global.it;
-global.it = function(desc, fn) {
-    i.call(this, desc, AIT.wrap(function() {
-        // console.info('it', this.root, Object.keys(this));
+AIT.after = function aitAfter(callback) {
+    Fiber(function() {
+        AIT.destroy(callback);
+    }).run();
+};
+
+var originalBeforeEach = global.beforeEach;
+var wrappedBeforeEach = function(fn) {
+    originalBeforeEach.call(this, AIT.wrap(fn));
+};
+
+/**
+ *  Wrap the mocha it() calls automatically.
+ */
+var originalIt = global.it;
+var wrappedIt = function(desc, fn) {
+    originalIt.call(this, desc, AIT.wrap(function () {
         if (!AIT._ait_beforeCalled) {
             throw new Error('AIT: Be sure to issue before(AIT.before); after(AIT.after); calls in your describe().');
         }
 
         fn.apply(this, arguments);
     }));
+};
+
+global.beforeEach = wrappedBeforeEach;
+global.it = wrappedIt;
+
+/**
+ * Reverts to original mocha it(). Useful for testing ait-mocha in mocha.
+ */
+AIT.unWrapMochaMethods = function() {
+    global.beforeEach = originalBeforeEach;
+    global.it = originalIt;
 };
 
 module.exports = AIT;

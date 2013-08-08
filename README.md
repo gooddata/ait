@@ -169,16 +169,17 @@ or if adding more before/after stuff is necessary:
 
 ```javascript
     before(function(done) {
-        AIT.before(function(done) {
+        AIT.before(function() {
             // init code
             done();
         });
     });
 
-    after(function() {
-        AIT.after();
-
-        // destroy code
+    after(function(done) {
+        AIT.after(function() {
+            // destroy code
+            done();
+        });
     });
 
     it(function() {
