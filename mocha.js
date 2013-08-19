@@ -66,7 +66,15 @@ var wrappedIt = function(desc, fn) {
             throw new Error('AIT: Be sure to issue before(AIT.before); after(AIT.after); calls in your describe().');
         }
 
-        fn.apply(this, arguments);
+        try {
+            fn.apply(this, arguments);
+        } catch (ex) {
+            if (ex.cause && ex.cause.value && ex.cause.value.message) {
+                console.log(ex.cause.value.message);
+            }
+            AIT.browser.screenshot('ait-error-' + new Date().getTime() + '.png');
+            throw ex;
+        }
     }));
 };
 
