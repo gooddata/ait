@@ -138,12 +138,13 @@ AIT.init = function aitInit(options, callback) {
          * Factory method to instantiate PageFragment using the configured
          * connected WebDriver client instance.
          **/
-        browser.create = function(Clazz, selector, by) {
+        browser.create = function(Clazz, selector, context, by) {
             if (Clazz) { // fragment type, create the fragment
-                if (by) {
+                if (by || context) {
                     selector = {
                         sel: selector,
-                        by: by
+                        by: by,
+                        context: context
                     };
                 }
 
@@ -151,7 +152,6 @@ AIT.init = function aitInit(options, callback) {
                     return Clazz.create({ root: selector });
                 } else {
                     var res = new Clazz({ root: selector });
-                    res.browser = browser;
                     return res;
                 }
             }

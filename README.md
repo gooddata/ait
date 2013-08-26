@@ -83,15 +83,28 @@ API
 
 ### By
 
-This helper provides PageFragment static factory calls. These create computed properties in which the PageFragment instance is only instantiated on-demand - upon the first `get` call done.
+This helper provides PageFragment static factory calls. These create computed properties in which the
+PageFragment instance is only instantiated on-demand - upon the first `get` call done.
 
  *`# By.css(PageFragmentClazz, cssSelector)`
 
    Instantiates the PageFragmentClazz with the cssSelector as its root.
+   Search for this root element is scoped by parent fragment root element.
+
+ *`# By.cssGlobal(PageFragmentClazz, cssSelector)`
+
+   Instantiates the PageFragmentClazz with the cssSelector as its root.
+   Search for this root element is unscoped.
 
  *`# By.xpath(PageFragmentClazz, xpathSelector)`
 
    Instantiates the PageFragmentClazz with the xpathSelector as its root.
+   Search for this root element is scoped by parent fragment root element.
+
+ *`# By.xpathGlobal(PageFragmentClazz, xpathSelector)`
+
+   Instantiates the PageFragmentClazz with the xpathSelector as its root.
+   Search for this root element is unscoped.
 
 ### PageFragment
 
@@ -143,7 +156,6 @@ tabs.get('length');
 tabs.objectAt(0).get('title');
 ```
 
-
 ### PageObject (extends PageFragment)
 
 Page representation which navigates the browser to a particular page `url`
@@ -186,6 +198,24 @@ or if adding more before/after stuff is necessary:
         // test code
     });
 ```
+
+
+AIT Testing
+-----------
+Unit test are located under test directory.
+
+```
+grunt test
+```
+
+Stars fixtures server and runs the tests.
+If you need to debug the tests you have to start the server first via:
+
+```
+grunt connect:server:keepalive
+```
+
+Then, you can run mocha in debug mode.
 
 Copyright
 ---------
