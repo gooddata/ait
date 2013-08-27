@@ -170,34 +170,48 @@ Page representation which navigates the browser to a particular page `url`
 Mocha Testing
 -------------
 
-var AIT = require('ait/mocha');
+var AIT = require('ait/mocha').init();
 
 ```javascript
+describe('A Feature', function() {
     before(AIT.before);
     after(AIT.after);
+
+    ...
+
+});
 ```
 
 or if adding more before/after stuff is necessary:
 
 ```javascript
-    before(function(done) {
-        AIT.before(function() {
-            // init code
-            done();
+    describe('A Feature', function() {
+        before(function(done) {
+            AIT.before(function() {
+                // init code
+                done();
+            });
         });
-    });
 
-    after(function(done) {
-        AIT.after(function() {
-            // destroy code
-            done();
+        after(function(done) {
+            AIT.after(function() {
+                // destroy code
+                done();
+            });
         });
-    });
 
-    it(function() {
-        // test code
+        it(function() {
+            // test code
+        });
     });
 ```
+
+Make sure before and after functions are defined within a describe function.
+The reason for this is that in case of multiple test files passed to mocha to run,
+all the before methods from all the test files defined before describe functions
+are run first before anything else. Similarly, after functions are run when the last
+test from the last file is finished. So, to avoid individual tests stepping to each
+others setup and teardown nest before functions to describe functions.
 
 
 AIT Testing
@@ -212,7 +226,7 @@ Stars fixtures server and runs the tests.
 If you need to debug the tests you have to start the server first via:
 
 ```
-grunt connect:server:keepalive
+grunt fixtures_server
 ```
 
 Then, you can run mocha in debug mode.

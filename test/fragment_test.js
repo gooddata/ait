@@ -1,6 +1,6 @@
 // Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
 
-var AIT = require('../mocha.js');
+var AIT = require('../mocha.js').init();
 
 var expect = require('expect.js');
 var sinon = require('sinon');
@@ -18,17 +18,18 @@ var List = AIT.PageFragment.extend({
     }.property()
 });
 
-before(function(done) {
-    AIT.before(function() {
-        AIT.browser.get('http://127.0.0.1:8888/list.html');
-        done();
-    });
-});
-
-after(AIT.after);
-
 describe('AIT.Fragment', function() {
+    before(function(done) {
+        AIT.before(function() {
+            AIT.browser.get('http://127.0.0.1:8888/list.html');
+            done();
+        });
+    });
+
+    after(AIT.after);
+
     it('should search for inner fragments inside current fragment', function() {
+        debugger;
         var list = List.create({
             root: '#list1'
         });
