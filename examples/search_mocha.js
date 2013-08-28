@@ -1,7 +1,7 @@
 // Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
 
 describe('Google Search', function() {
-    var AIT = require('../mocha');
+    var AIT = require('../mocha').init();
 
     var Input = AIT.PageFragment.extend({
         type: function(text) {

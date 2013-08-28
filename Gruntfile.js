@@ -19,15 +19,13 @@ module.exports = function(grunt) {
                 timeout: 100000
             },
 
-            ait: { src: ['test/ait_test.js'] },
-            fragment: { src: ['test/fragment_test.js'] }
+
+            all: { src: ['test/*_test.js'] }
         }
     });
 
-    grunt.registerTask('fixture_server', ['connect:server:keepalive']);
-
-    // Currently, run fragment test only due to the multiple mocha test files run bug
-    grunt.registerTask('test', ['connect', 'simplemocha:fragment']);
+    grunt.registerTask('fixtures_server', ['connect:server:keepalive']);
+    grunt.registerTask('test', ['connect', 'simplemocha']);
 
     grunt.loadNpmTasks('grunt-simple-mocha');
     grunt.loadNpmTasks('grunt-contrib-connect');

@@ -78,15 +78,13 @@ var wrappedIt = function(desc, fn) {
     }));
 };
 
-global.beforeEach = wrappedBeforeEach;
-global.it = wrappedIt;
+var init = function(wrapMocha) {
+    if (wrapMocha !== false) {
+        global.beforeEach = wrappedBeforeEach;
+        global.it = wrappedIt;
+    }
 
-/**
- * Reverts to original mocha it(). Useful for testing ait-mocha in mocha.
- */
-AIT.unWrapMochaMethods = function() {
-    global.beforeEach = originalBeforeEach;
-    global.it = originalIt;
+    return AIT;
 };
 
-module.exports = AIT;
+module.exports = { init: init };
