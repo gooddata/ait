@@ -14,7 +14,7 @@ module.exports = function(grunt) {
             }
         },
 
-        simplemocha: {
+        mochaTest: {
             options: {
                 timeout: 100000
             },
@@ -25,8 +25,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('fixtures_server', ['connect:server:keepalive']);
-    grunt.registerTask('test', ['connect', 'simplemocha']);
+    grunt.registerTask('test', ['connect', 'mochaTest']);
 
-    grunt.loadNpmTasks('grunt-simple-mocha');
+    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-connect');
 };

@@ -40,27 +40,38 @@ describe('AIT mocha support', function() {
     });
 
     describe('AIT.wrap', function() {
-        describe('function without done callback', function() {
-            it('should create a new function that runs done callback in the end', function() {
-                var cbkSpy = sinon.spy();
-                var wrapped =  AIT.wrap(function() {});
-                wrapped(cbkSpy);
-
-                expect(cbkSpy).was.called();
-            });
+        before(function() {
+            this.contextDweller = true
         });
 
-        describe('function with done callback', function() {
-            it('should make sure done callback is correctly passed down to wrapped function', function() {
-                var done = sinon.spy();
-                var wrapped =  AIT.wrap(function(done) {
-                    done();
-                });
+        it('should create a new function that runs done callback in the end', function() {
+            var cbkSpy = sinon.spy();
+            var wrapped =  AIT.wrap(function() {});
+            wrapped(cbkSpy);
 
-                wrapped(done);
-
-                expect(done).was.called();
-            });
+            expect(cbkSpy).was.called();
         });
+
+        it('should preserve mocha context', AIT.wrap(function() {
+            expect(this.contextDweller).to.be(true);
+        }));
+
+    });
+
+    // Now, wrap mocha hooks/its into AIT wrappers
+    AIT = require('../mocha.js').init();
+
+    before(function(done) {
+        var that = this;
+        AIT.before(function() {
+            that.contextDweller = true;
+            done();
+        });
+    });
+
+    after(AIT.after);
+
+    it('should preserve mocha context', function() {
+        expect(this.contextDweller).to.be(true);
     });
 });

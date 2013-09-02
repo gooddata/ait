@@ -14,26 +14,20 @@ var Fiber = require('fibers');
 function aitWrap(fn) {
     var f = fn;
 
-    function runFn(done) {
-        var that = this;
-
+    function runFn(context, done) {
         Fiber(function() {
             // inject out browser instance into the wrap() method functor
             Fiber.current.browser = AIT.browser;
-            f.apply(that, [done]);
+            f.apply(context, [done]);
         }).run();
     }
 
-    if (fn.toString().match(/^\s*function\s*\(\s*done\s*\)/)) {
-        return function(done) { runFn(done); };
-    } else {
-        // wrap the sync code into an async method
-        f = function(done) {
-            fn.call(this);
-            done();
-        };
-        return function(done) { runFn(done); };
-    }
+    // wrap the sync code into an async method
+    f = function(done) {
+        fn.call(this);
+        done();
+    };
+    return function(done) { runFn(this, done); };
 }
 
 AIT.wrap = aitWrap;
