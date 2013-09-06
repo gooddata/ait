@@ -25,15 +25,11 @@ var Search = AIT.PageObject.extend({
     _query:  By.css(Input, '#sb_form_q'),
     _submit: By.css(Button, '#sb_form_go'),
 
-    execute: function() {
-        this._super();
-
+    getResults: function() {
         this.get('_query').type(this.get('query'));
-        this.get('_submit').wait(100).click();
+        this.get('_submit').click();
 
-        var results = $("h3 a").wait(1000);
-        this.set('results', results);
-        return results;
+        return $("h3 a");
     },
 
     // The following gets executed in the selenium driven browser
@@ -51,7 +47,9 @@ var Search = AIT.PageObject.extend({
 // Using the PageObject and PageFragments
 var search = Search.create({ query: 'GoodData' }); // google for
 
-var results = search.execute();
+search.load();
+
+var results = search.getResults();
 
 // iterate and use the quQuery abstraction
 results.each(function(idx, link) { console.info(''+idx+'. '+link.text() ); });
