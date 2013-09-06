@@ -24,15 +24,12 @@ describe('Google Search', function() {
         _query:  By.css(Input, '#sb_form_q'),
         _submit: By.css(Button, '#sb_form_go'),
 
-        execute: function() {
-            this._super();
 
+        getResults: function() {
             this.get('_query').type(this.get('query'));
-            this.get('_submit').wait(100).click();
+            this.get('_submit').click();
 
-            var results = AIT.$("h3 a").wait(1000);
-            this.set('results', results);
-            return results;
+            return AIT.$("h3 a");
         }
     });
 
@@ -48,7 +45,9 @@ describe('Google Search', function() {
     after(AIT.after);
 
     it('should find GoodData references', function() {
-        var results = Search.create({ query: 'GoodData' }).execute();
+        var search = Search.create({ query: 'GoodData' }).load();
+        var results =  search.getResults();
+
         if (results.length < 5) throw "GoodData not found!";
     });
 });
