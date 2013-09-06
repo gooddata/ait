@@ -165,9 +165,12 @@ Page representation which navigates the browser to a particular page `url`
 
  *`+ url`*
 
- *`# execute()`*
+ *`# load()`*
 
-   Navigates the browser to the `url` configured
+    Navigates the browser to the `url` configured and wait till the page is loaded.
+
+ *`# waitForLoaded()`*
+    Em.K by default. Implement this method in the child to tell how to wait for page load.
 
 
 Mocha Testing
