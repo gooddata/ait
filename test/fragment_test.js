@@ -29,7 +29,6 @@ describe('AIT.Fragment', function() {
     after(AIT.after);
 
     it('should search for inner fragments inside current fragment', function() {
-        debugger;
         var list = List.create({
             root: '#list1'
         });
