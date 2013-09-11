@@ -67,7 +67,10 @@ var wrappedIt = function(desc, fn) {
                 console.log(ex.cause.value.message);
             }
             AIT.browser.screenshot('ait-error-' + new Date().getTime() + '.png');
-            throw ex;
+
+            AIT.browser.quit(function() {
+                throw ex;
+            });
         }
     }));
 };
