@@ -94,7 +94,7 @@ PageFragment instance is only instantiated on-demand - upon the first `get` call
    Instantiates the PageFragmentClazz with the cssSelector as its root.
    Search for this root element is scoped by parent fragment root element.
 
- *`# By.cssGlobal(PageFragmentClazz, cssSelector)`
+ *`# By.globalCss(PageFragmentClazz, cssSelector)`
 
    Instantiates the PageFragmentClazz with the cssSelector as its root.
    Search for this root element is unscoped.
