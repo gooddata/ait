@@ -6,18 +6,6 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 expect = require('sinon-expect').enhance(expect, sinon, 'was');
 
-var ListItem = AIT.PageFragment.extend();
-
-var ListItems = AIT.PageFragmentArray.extend({itemClass: ListItem});
-
-var List = AIT.PageFragment.extend({
-    _items: By.css(ListItems, 'li'),
-
-    itemsCount: function() {
-        return this.get('_items').get('length');
-    }.property()
-});
-
 describe('AIT.Fragment', function() {
     before(function(done) {
         AIT.before(function() {
@@ -28,27 +16,63 @@ describe('AIT.Fragment', function() {
 
     after(AIT.after);
 
-    it('should search for inner fragments inside current fragment', function() {
-        var list = List.create({
-            root: '#list1'
+    describe('nested page fragments', function() {
+        var ParentFragment = AIT.PageFragment.extend({
+            root: '#parentFragment',
+            childFragment: By.css(AIT.PageFragment, '#childFragment')
         });
 
-        expect(list.get('itemsCount')).to.eql(2);
+        it('nested fragment should have root element derived from the parent fragment', function() {
+            var parentFragment = ParentFragment.create();
+            var childFragment = parentFragment.get('childFragment');
+
+            var childRoot = childFragment.get('root');
+            expect(childRoot).to.be.a(Object);
+            expect(childRoot.context).to.be.a(Object);
+            expect(childRoot.sel).to.be('#childFragment');
+        });
     });
 
-    it('should search for elements globaly if told to do so', function() {
+    describe('fragment array creation', function() {
+        var ListItem = AIT.PageFragment.extend({
+            getStuff: function() {
+                var stuff = this.$('.stuff');
+                return stuff;
+            }
+        });
+
+        var ListItems = AIT.PageFragmentArray.extend({itemClass: ListItem});
+
         var List = AIT.PageFragment.extend({
-            _items: By.globalCss(ListItems, 'li'),
-
-            itemsCount: function() {
-                return this.get('_items').get('length');
-            }.property()
+            items: By.css(ListItems, 'li')
         });
 
-        var list = List.create({
-            root: '#list1'
+        it('array items should be sought within parent fragment root element by default', function() {
+            var list = List.create({
+                root: '#list1'
+            });
+
+            var items = list.get('items');
+            expect(items.get('length')).to.eql(2);
+
+            // Item root should be derived from parent root
+            var item = items.objectAt(0);
+            var stuff = item.getStuff();
+
+            expect(stuff.get('length')).to.be(2);
         });
 
-        expect(list.get('itemsCount')).to.eql(4);
+        it('array items should be sought globally if told so', function() {
+            var List = AIT.PageFragment.extend({
+                items: By.globalCss(ListItems, 'li')
+            });
+
+            var list = List.create({
+                root: '#list1'
+            });
+
+            var items = list.get('items');
+            expect(items.get('length')).to.eql(4);
+        });
     });
 });
