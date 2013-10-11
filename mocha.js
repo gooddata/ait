@@ -50,6 +50,11 @@ var wrappedBeforeEach = function(fn) {
     originalBeforeEach.call(this, AIT.wrap(fn));
 };
 
+var originalAfterEach = global.afterEach;
+var wrappedAfterEach = function(fn) {
+    originalAfterEach.call(this, AIT.wrap(fn));
+};
+
 /**
  *  Wrap the mocha it() calls automatically.
  */
@@ -78,6 +83,7 @@ var wrappedIt = function(desc, fn) {
 var init = function(wrapMocha) {
     if (wrapMocha !== false) {
         global.beforeEach = wrappedBeforeEach;
+        global.afterEach = wrappedAfterEach;
         global.it = wrappedIt;
     }
 
