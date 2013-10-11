@@ -56,6 +56,24 @@ describe('AIT mocha support', function() {
             expect(this.contextDweller).to.be(true);
         }));
 
+        it('should be called on beforeEach', sinon.test(function() {
+            var fn = this.spy();
+            this.spy(AIT, 'wrap');
+
+            beforeEach(fn);
+
+            expect(AIT.wrap).was.calledOnce();
+        }));
+
+        it('should be called on afterEach', sinon.test(function() {
+            var fn = this.spy();
+            this.spy(AIT, 'wrap');
+
+            afterEach(fn);
+
+            expect(AIT.wrap).was.calledOnce();
+        }));
+
     });
 
     // Now, wrap mocha hooks/its into AIT wrappers

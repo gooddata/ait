@@ -1,7 +1,7 @@
 {
   "name": "ait",
   "main": "./ait.js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Automated Integration Testing Framework",
   "repository": {
     "type": "git",
