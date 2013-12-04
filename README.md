@@ -11,6 +11,8 @@ For familiar DOM referencing it uses [AuQuery](https://github.com/cyrjano/AuQuer
 
 [Mocha](http://visionmedia.github.io/mocha) is used to drive the test flow. It is configured with long `timeout` for selenium test cases and to `bail` after a failed test as the `it()` calls define the test steps and it doesn't make sense to continue in the flow if a prerequisite step fails.
 
+[node-gd](https://github.com/mikesmullin/node-gd) with gd library are used for custom element screenshotting on the page. See [node-gd readme](https://npmjs.org/package/node-gd#readme) for more info.
+
 The framework provides `PageObject, PageFragment and PageFragmentArray` classes of which the concepts come from [Arquillian](http://arquillian.org/blog/2012/09/19/introducting-arquillian-graphene-page-fragments/).
 
 

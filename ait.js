@@ -1,6 +1,8 @@
 // Copyright (C) 2013, GoodData(R) Corporation. All rights reserved.
 
 var au = require('auquery');
+var fs = require('fs');
+var gd = require('node-gd');
 
 // Exported AIT instance
 var AIT = {
@@ -70,6 +72,10 @@ AIT.init = function aitInit(options, callback) {
         options.set('browserName', process.env.browser);
     }
 
+    if (!options.get('screenshotsDir')) {
+        options.set('screenshotsDir', process.env.screenshotsDir);
+    }
+
     AIT.options = options;
 
     function cb($, browser){
@@ -114,16 +120,29 @@ AIT.init = function aitInit(options, callback) {
         browser.init({ browserName: options.browserName || 'phantomjs' });
 
         // convenience aliases
-        browser.screenshot = function screenshot(filename) {
-            var data = browser.takeScreenshot();
-
-            filename = filename || 'ait-screenshot-' + new Date().getTime() + '.png';
+        browser.screenshot = function screenshot(filename, $element) {
+            filename = (filename || 'ait-screenshot-' + new Date().getTime()) + '.png';
 
             var dir = options.screenshotsDir || 'ait-screenshots';
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
-            var fs = require('fs');
-            if (!path.existsSync(dir)) fs.mkdirSync(dir);
-            fs.writeFileSync(dir + '/' + filename, data, 'base64');
+            var data = browser.takeScreenshot();
+
+            if ($element) {
+                var element = $element.get(0);
+                var image = gd.createFromPngPtr(new Buffer(data, 'base64'));
+                var size = element.getSize();
+                var location = element.getLocation();
+
+                var croppedImage = gd.createTrueColor(size.width, size.height);
+                image.copy(croppedImage, 0, 0, location.x, location.y, size.width, size.height);
+                croppedImage.savePng(dir + '/' + filename);
+
+                croppedImage.destroy();
+                image.destroy();
+            } else {
+                fs.writeFileSync(dir + '/' + filename, data, 'base64');
+            }
         };
 
         // Implicit wait timeout defaults to 100s

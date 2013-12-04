@@ -12,7 +12,8 @@
     "fibers": "~1.0",
     "auquery": "git://github.com/cyrjano/AuQuery",
     "ember-runtime": "git://github.com/opichals/ember-runtime-npm",
-    "wd": "0.1.x"
+    "wd": "0.1.x",
+    "node-gd": "~0.2.3"
   },
   "devDependencies": {
     "mocha": "~1.12",
