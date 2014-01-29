@@ -121,7 +121,7 @@ AIT.init = function aitInit(options, callback) {
 
         // convenience aliases
         browser.screenshot = function screenshot(filename, $element) {
-            filename = (filename || 'ait-screenshot-' + new Date().getTime()) + '.png';
+            filename = (filename || 'ait-screenshot-' + Date.now()) + '.png';
 
             var dir = options.screenshotsDir || 'ait-screenshots';
             if (!fs.existsSync(dir)) fs.mkdirSync(dir);
@@ -191,7 +191,7 @@ AIT.init = function aitInit(options, callback) {
 
         var browser = AIT.browser;
         try {
-            browser.screenshot('ait-error-' + new Date().getTime() + '.png');
+            browser.screenshot('ait-error-' + Date.now());
             browser.quit();
         } catch(e) {
             // quietly finalize
