@@ -67,6 +67,9 @@ Also require() call is supported in order to be able to structure the configurat
 ```
 $ cat .aitrc
 ({
+    windowWidth: 1024,
+    windowHeight: 768,
+
     server: "https://secure.gooddata.com",
 
     gdcUser: "demo@acme.com",
