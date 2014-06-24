@@ -151,7 +151,6 @@ AIT.init = function aitInit(options, callback) {
         // initializing the timeout
         browser.setImplicitWaitTimeout(browser.implicitWaitTimeout);
 
-	browser.setWindowSize(1280, 1024);
         /**
          * @method create
          *
