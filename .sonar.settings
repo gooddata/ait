@@ -1,2 +1,2 @@
 sonar.sources=.
-sonar.exclusions=
+sonar.exclusions=**/dependency-check-report.html
